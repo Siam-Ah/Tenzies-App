@@ -3,14 +3,16 @@ import Die from "./components/Die"
 import {nanoid} from "nanoid"
 import Confetti from 'react-confetti'
 
+// Main App component
 export default function App() {
-  const [dice, setDice] = React.useState(allNewDice())
-  const [tenzies, setTenzies] = React.useState(false)
-  const [rolls, setRolls] = React.useState(0)
+  const [dice, setDice] = React.useState(allNewDice()) // State for storing dice
+  const [tenzies, setTenzies] = React.useState(false) // State for game status
+  const [rolls, setRolls] = React.useState(0) // State for roll count
   const [bestRolls, setBestRolls] = React.useState(
     () => localStorage.getItem("rolls") || "No best"
-  )
+  ) // State for best roll count
 
+  // Effect to check for winning condition
   React.useEffect(() => {
     const allIsHeld = dice.every(die => die.isHeld)
     const firstValue = dice[0].value
@@ -25,6 +27,7 @@ export default function App() {
     }
   }, [dice])
 
+  // Function to generate a new set of dice
   function allNewDice() {
     const newDice = []
     for(let i = 0; i < 10; i++) {
@@ -33,6 +36,7 @@ export default function App() {
     return newDice
   }
 
+  // Function to generate a single new die
   function generateNewDie() {
     const randNumber = Math.floor(Math.random() * 6) + 1
     const dieObject = {
@@ -43,6 +47,7 @@ export default function App() {
     return dieObject
   }
 
+  // Function to handle rolling dice
   function roll() {
     if(!tenzies) {
       setRolls(prevRolls => prevRolls + 1)
@@ -59,6 +64,7 @@ export default function App() {
     }
   }
 
+  // Function to handle holding a die
   function holdDice(id) {
     setDice(prevDice => {
       return prevDice.map(die => {
@@ -67,6 +73,7 @@ export default function App() {
     })
   }
 
+  // Create Die components for each die
   const diceElements = dice.map(die => (
     <Die 
       key={die.id} 
